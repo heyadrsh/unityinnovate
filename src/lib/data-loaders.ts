@@ -2,9 +2,9 @@ import qs from "qs";
 import axios from "axios";
 import { getStrapiURL } from "@/lib/utils";
 
-// Configuration - Use local Strapi
-const STRAPI_URL = 'http://localhost:1337';
-const STRAPI_TOKEN = '80523a9463d237ac6b64084bdfc8b0bfebc73886dee7077bbb036a05b02aa316134897d4740b779174972230276f07cd80398ebe6e01584ac4d6bd7a07831a3a2e4e17b856105415e2437bc2a89c66667181b9ef0390fbcdd80935d867e3569b884f76648aebe626057ac8e0c7cd172cd42aad7f662c62797f8fda139a98c77f';
+// Configuration - Use environment variables for Strapi Cloud
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_API_URL?.replace('/api', '') || 'https://calm-flowers-c5253b83e1.strapiapp.com';
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_TOKEN || '5dedb8c48d260bfba1af32aef11707351f22dc7b4909af4e5e53690d4ffaf37b28e114fc4daab69ff71393cc15eb8a88a3466e2b881f9c8350120c140113a2a183be07411cb780f3f83488f3158719dce17503e0c1174d0c6b41a98ffe3c93ccd1035d1863419f024dcc9ac34d2620983f9c4c8b141ce551f6b76a434757eb2c';
 
 console.log('🔗 Strapi URL:', STRAPI_URL);
 console.log('🔑 Using API Token:', STRAPI_TOKEN ? 'Yes' : 'No');

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     domains: [
       'localhost',
       'calm-flowers-c5253b83e1.strapiapp.com',
+      'calm-flowers-c5253b83e1.media.strapiapp.com',
       'res.cloudinary.com'
     ],
     unoptimized: false,
@@ -22,6 +23,12 @@ const nextConfig: NextConfig = {
         hostname: 'calm-flowers-c5253b83e1.strapiapp.com',
         port: '',
         pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'calm-flowers-c5253b83e1.media.strapiapp.com',
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'http',

@@ -27,12 +27,14 @@ const ClientTestimonials = () => {
         
         if (clientLogosResponse?.data) {
           setClientLogosData(clientLogosResponse.data);
+          console.log('✅ Client logos data loaded:', clientLogosResponse.data);
         }
         if (testimonialsResponse?.data) {
           setTestimonialsData(testimonialsResponse.data);
+          console.log('✅ Testimonials data loaded:', testimonialsResponse.data);
         }
       } catch (error) {
-        console.error('Error fetching testimonials and client logos data:', error);
+        console.error('❌ Error fetching testimonials and client logos data:', error);
       } finally {
         setLoading(false);
       }
@@ -40,6 +42,15 @@ const ClientTestimonials = () => {
 
     fetchData();
   }, []);
+
+  // Helper function to safely get photo URL
+  const getPhotoUrl = (photo: any): string | undefined => {
+    if (!photo) return undefined;
+    if (Array.isArray(photo)) {
+      return photo[0]?.url;
+    }
+    return photo.url;
+  };
 
   // Fallback testimonials data
   const fallbackTestimonials = [
@@ -79,32 +90,35 @@ const ClientTestimonials = () => {
         ? extractTextFromContent(testimonialsData.testimonial1Quote)
         : fallbackTestimonials[0].content,
       author: testimonialsData.testimonial1Author || fallbackTestimonials[0].author,
-      role: testimonialsData.testimonial1Position || fallbackTestimonials[0].role,
-      company: 'Global Pharma Inc.', // This could be added to schema later
+      role: testimonialsData.testimonial1Author || fallbackTestimonials[0].role, // The author field contains the role
+      company: testimonialsData.testimonial1Position || 'Novartis', // Position field contains company
       rating: 5,
-      photo: testimonialsData.testimonial1Photo?.[0]?.url
+      photo: getPhotoUrl(testimonialsData.testimonial1Photo) || getPhotoUrl(testimonialsData.Media?.[0])
     },
     {
       content: testimonialsData.testimonial2Quote 
         ? extractTextFromContent(testimonialsData.testimonial2Quote)
         : fallbackTestimonials[1].content,
       author: testimonialsData.testimonial2Author || fallbackTestimonials[1].author,
-      role: testimonialsData.testimonial2Position || fallbackTestimonials[1].role,
-      company: 'Beauty Leaders Corp',
+      role: testimonialsData.testimonial2Author || fallbackTestimonials[1].role,
+      company: testimonialsData.testimonial2Position || 'Siemens Healthineers',
       rating: 5,
-      photo: testimonialsData.testimonial2Photo?.url
+      photo: getPhotoUrl(testimonialsData.testimonial2Photo)
     },
     {
       content: testimonialsData.testimonial3Quote 
         ? extractTextFromContent(testimonialsData.testimonial3Quote)
         : fallbackTestimonials[2].content,
       author: testimonialsData.testimonial3Author || fallbackTestimonials[2].author,
-      role: testimonialsData.testimonial3Position || fallbackTestimonials[2].role,
-      company: 'Energy Solutions Ltd',
+      role: testimonialsData.testimonial3Author || fallbackTestimonials[2].role,
+      company: testimonialsData.testimonial3Position || 'Nissan',
       rating: 5,
-      photo: testimonialsData.testimonial3Photo?.url
+      photo: getPhotoUrl(testimonialsData.testimonial3Photo)
     }
   ] : fallbackTestimonials;
+
+  // Debug logging
+  console.log('🔍 Final testimonials data:', testimonials);
 
   return (
     <section ref={ref} className="section-padding">
@@ -118,7 +132,7 @@ const ClientTestimonials = () => {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             {sectionTitle.includes('Clients') ? (
               <>
-            What Our <span className="section-heading">Clients Say</span>
+                What Our <span className="section-heading">Clients Say</span>
               </>
             ) : (
               sectionTitle
@@ -132,7 +146,7 @@ const ClientTestimonials = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <motion.div
-              key={testimonial.author}
+              key={`${testimonial.author}-${index}`}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 * index }}
@@ -153,21 +167,25 @@ const ClientTestimonials = () => {
                 </p>
 
                 <div className="border-t pt-4 flex items-center gap-4">
-                  {testimonial.photo && getStrapiMedia(testimonial.photo) && (
-                    <div className="w-12 h-12 relative rounded-full overflow-hidden flex-shrink-0">
+                  {/* Company Logo */}
+                  {testimonial.photo && (
+                    <div className="w-12 h-12 relative rounded-full overflow-hidden flex-shrink-0 bg-gray-100">
                       <Image
-                        src={getStrapiMedia(testimonial.photo)!}
-                        alt={testimonial.author}
+                        src={getStrapiMedia(testimonial.photo) || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face'}
+                        alt={`${testimonial.company} logo`}
                         fill
-                        className="object-cover"
+                        className="object-contain p-1"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face';
+                          console.error('❌ Failed to load logo for:', testimonial.company);
+                        }}
                       />
                     </div>
                   )}
                   <div>
-                  <p className="font-semibold text-gray-900">{testimonial.author}</p>
-                  <p className="text-sm text-gray-600">
-                    {testimonial.role}, {testimonial.company}
-                  </p>
+                    <p className="font-semibold text-gray-900">{testimonial.role}</p>
+                    <p className="text-sm text-gray-600">{testimonial.company}</p>
                   </div>
                 </div>
               </div>
@@ -193,7 +211,7 @@ const ClientTestimonials = () => {
                 
                 return (
                   <motion.div
-                    key={logo.id}
+                    key={`${logo.id}-${index}`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
@@ -204,19 +222,24 @@ const ClientTestimonials = () => {
                       alt={logo.alternativeText || `Client logo ${index + 1}`}
                       fill
                       className="object-contain"
+                      onError={(e) => {
+                        console.error('❌ Failed to load client logo:', logoUrl);
+                      }}
                     />
                   </motion.div>
                 );
               })
             ) : loading ? (
               // Loading state
-              Array.from({ length: 6 }).map((_, i) => (
+              Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="w-32 h-12 bg-gray-200 rounded animate-pulse"></div>
               ))
             ) : (
               // Fallback placeholder
-              Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="w-32 h-12 bg-gray-300 rounded"></div>
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="w-32 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
+                  Logo {i + 1}
+                </div>
               ))
             )}
           </div>

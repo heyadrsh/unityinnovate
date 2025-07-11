@@ -1,0 +1,37 @@
+{
+  "name": "Unity Innovate",
+  "short_name": "Unity Innovate",
+  "description": "Unity Innovate is a cutting-edge global insights and innovation partner that enables companies to make bold, proactive choices in a world that is changing quickly.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7EDDDD",
+  "orientation": "portrait-primary",
+  "categories": ["business", "consulting", "innovation"],
+  "lang": "en",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+} 

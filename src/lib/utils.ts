@@ -14,8 +14,10 @@ export function cn(...inputs: ClassValue[]) {
 
 // Strapi URL helpers
 export function getStrapiURL() {
-  // Get the Strapi URL from the environment variable or use default
-  return process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  // Get the base Strapi URL from environment variables
+  return process.env.NEXT_PUBLIC_STRAPI_URL || 
+         process.env.NEXT_PUBLIC_STRAPI_API_URL?.replace('/api', '') || 
+         'https://calm-flowers-c5253b83e1.strapiapp.com';
 }
 
 export function getStrapiMedia(url: string | null) {
@@ -25,9 +27,14 @@ export function getStrapiMedia(url: string | null) {
   if (url.startsWith('http') || url.startsWith('//')) {
     return url;
   }
-
-  // Otherwise, combine it with the Strapi URL
-  return `${getStrapiURL()}${url}`;
+  
+  // If it's a relative path starting with /, prepend the base Strapi URL
+  if (url.startsWith('/')) {
+    return `${getStrapiURL()}${url}`;
+  }
+  
+  // Otherwise, assume it's a relative path and add /uploads/
+  return `${getStrapiURL()}/uploads/${url}`;
 }
 
 // Convert Markdown to HTML

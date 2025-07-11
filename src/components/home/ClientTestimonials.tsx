@@ -7,7 +7,7 @@ import { Quote, Star } from 'lucide-react';
 import Image from 'next/image';
 import { getHomepageClientLogos, getHomepageTestimonials } from '@/lib/data-loaders';
 import { HomepageClientLogos, HomepageTestimonials } from '@/lib/types';
-import { extractTextFromContent } from '@/lib/utils';
+import { extractTextFromContent, getStrapiMedia } from '@/lib/utils';
 
 const ClientTestimonials = () => {
   const ref = useRef(null);
@@ -153,10 +153,10 @@ const ClientTestimonials = () => {
                 </p>
 
                 <div className="border-t pt-4 flex items-center gap-4">
-                  {testimonial.photo && (
+                  {testimonial.photo && getStrapiMedia(testimonial.photo) && (
                     <div className="w-12 h-12 relative rounded-full overflow-hidden flex-shrink-0">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${testimonial.photo}`}
+                        src={getStrapiMedia(testimonial.photo)!}
                         alt={testimonial.author}
                         fill
                         className="object-cover"
@@ -187,22 +187,27 @@ const ClientTestimonials = () => {
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
             {clientLogosData?.clientLogos?.length ? (
-              clientLogosData.clientLogos.map((logo, index) => (
-                <motion.div
-                  key={logo.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                  className="w-32 h-12 relative grayscale hover:grayscale-0 transition-all duration-300"
-                >
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${logo.url}`}
-                    alt={logo.alternativeText || `Client logo ${index + 1}`}
-                    fill
-                    className="object-contain"
-                  />
-                </motion.div>
-              ))
+              clientLogosData.clientLogos.map((logo, index) => {
+                const logoUrl = getStrapiMedia(logo.url);
+                if (!logoUrl) return null;
+                
+                return (
+                  <motion.div
+                    key={logo.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                    className="w-32 h-12 relative grayscale hover:grayscale-0 transition-all duration-300"
+                  >
+                    <Image
+                      src={logoUrl}
+                      alt={logo.alternativeText || `Client logo ${index + 1}`}
+                      fill
+                      className="object-contain"
+                    />
+                  </motion.div>
+                );
+              })
             ) : loading ? (
               // Loading state
               Array.from({ length: 6 }).map((_, i) => (

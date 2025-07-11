@@ -59,9 +59,9 @@ const Footer = () => {
         setGlobalSettings({
           siteName: 'Unity Innovate',
           siteDescription: 'Research-Led. Tech-Enabled. Future-Aligned.',
-          email: 'sales@unityinnovate.com',
-          phone: '+91-141-4920704',
-          address: 'HQ: Second Home Spitalfields,\n68 Hanbury Street, London E1 5JL'
+          email: 'contact@unityinnovate.com',
+          phone: '+91 7835877980',
+          address: 'HQ: 2088, Patel Nagar West,\nNew Delhi, India - 110008'
         });
       } finally {
         setLoading(false);
@@ -75,9 +75,9 @@ const Footer = () => {
   const settings = globalSettings || {
     siteName: 'Unity Innovate',
     siteDescription: 'Research-Led. Tech-Enabled. Future-Aligned.',
-    email: 'sales@unityinnovate.com',
-    phone: '+91-141-4920704',
-    address: 'HQ: Second Home Spitalfields,\n68 Hanbury Street, London E1 5JL'
+    email: 'contact@unityinnovate.com',
+    phone: '+91 7835877980',
+    address: 'HQ: 2088, Patel Nagar West,\nNew Delhi, India - 110008'
   };
 
   return (

@@ -94,7 +94,7 @@ const CareersCTA = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
-                    href="mailto:jobs@unityinnovate.com"
+                    href="mailto:hitesh@unityinnovate.com"
                     className="inline-flex items-center justify-center bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-white/95 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                   >
                     <Mail className="mr-2 w-5 h-5" />
@@ -116,7 +116,7 @@ const CareersCTA = () => {
                 <div className="space-y-3 text-white/90">
                   <div>
                     <div className="font-medium">Careers Team</div>
-                    <div className="text-sm">jobs@unityinnovate.com</div>
+                    <div className="text-sm">hitesh@unityinnovate.com</div>
                   </div>
                   <div>
                     <div className="font-medium">Response Time</div>

@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { getHomepageContactCTA } from '@/lib/data-loaders';
+import { getHomepageContactCTA, submitConsultationRequest } from '@/lib/data-loaders';
 import { HomepageContactCTA } from '@/lib/types';
 import { renderMarkdown, extractTextFromContent } from '@/lib/utils';
 
@@ -14,6 +14,21 @@ const ContactSection = () => {
   const isInView = useInView(ref, { once: true });
   const [contactData, setContactData] = useState<HomepageContactCTA | null>(null);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    company: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({
+    type: null,
+    message: ''
+  });
 
   useEffect(() => {
     const fetchContactData = async () => {
@@ -33,16 +48,54 @@ const ContactSection = () => {
     fetchContactData();
   }, []);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setFormStatus({ type: null, message: '' });
+
+    try {
+      await submitConsultationRequest(formData);
+      setFormStatus({
+        type: 'success',
+        message: 'Thank you! We will get back to you soon.'
+      });
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        company: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormStatus({
+        type: 'error',
+        message: 'Something went wrong. Please try again.'
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   // Fallback data
   const fallbackData = {
     mainTitle: 'Ready to Elevate Your Business?',
     description: "Let's explore how our comprehensive services can drive innovation, optimize operations, and create lasting value for your organization.",
     emailLabel: 'Email us at',
-    emailAddress: 'sales@unityinnovate.com',
+    emailAddress: 'contact@unityinnovate.com',
     phoneLabel: 'Call us at',
-    Text: '+91-141-4920704',
+    Text: '+91 7835877980',
     addressLabel: 'Visit us at',
-    address: 'Second Home Spitalfields, London',
+    address: '2088, Patel Nagar West, New Delhi, India - 110008',
     ctaButtonText: 'Get in Touch'
   };
 
@@ -148,39 +201,78 @@ const ContactSection = () => {
           >
             <div className="bg-white/[0.08] backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl">
               <h3 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-white">Request a Consultation</h3>
-              <form className="space-y-5 sm:space-y-6">
+              
+              {formStatus.type && (
+                <div 
+                  className={`mb-6 p-4 rounded-lg ${
+                    formStatus.type === 'success' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
+                  }`}
+                >
+                  {formStatus.message}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <input
                     type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
                     placeholder="First Name"
+                    required
                     className="w-full px-4 py-3 sm:py-4 bg-white/[0.03] border border-white/10 rounded-lg placeholder-white/40 text-white text-base focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] transition-all touch-manipulation min-h-[48px]"
                   />
                   <input
                     type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
                     placeholder="Last Name"
+                    required
                     className="w-full px-4 py-3 sm:py-4 bg-white/[0.03] border border-white/10 rounded-lg placeholder-white/40 text-white text-base focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] transition-all touch-manipulation min-h-[48px]"
                   />
                 </div>
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   placeholder="Email Address"
+                  required
                   className="w-full px-4 py-3 sm:py-4 bg-white/[0.03] border border-white/10 rounded-lg placeholder-white/40 text-white text-base focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] transition-all touch-manipulation min-h-[48px]"
                 />
                 <input
                   type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
                   placeholder="Company Name"
+                  required
                   className="w-full px-4 py-3 sm:py-4 bg-white/[0.03] border border-white/10 rounded-lg placeholder-white/40 text-white text-base focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] transition-all touch-manipulation min-h-[48px]"
                 />
                 <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
                   placeholder="How can we help you?"
+                  required
                   rows={4}
                   className="w-full px-4 py-3 sm:py-4 bg-white/[0.03] border border-white/10 rounded-lg placeholder-white/40 text-white text-base focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] transition-all resize-none touch-manipulation"
                 />
                 <button
                   type="submit"
-                  className="w-full bg-accent text-white px-6 py-4 rounded-lg text-base font-semibold hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30 touch-manipulation min-h-[52px]"
+                  disabled={submitting}
+                  className="w-full bg-accent text-white px-6 py-4 rounded-lg text-base font-semibold hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30 touch-manipulation min-h-[52px] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  Send Message
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                      Sending...
+                    </>
+                  ) : (
+                    'Send Message'
+                  )}
                 </button>
               </form>
             </div>

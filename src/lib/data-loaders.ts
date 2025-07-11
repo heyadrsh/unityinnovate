@@ -3,8 +3,8 @@ import axios from "axios";
 import { getStrapiURL } from "@/lib/utils";
 
 // Configuration - Use environment variables for Strapi Cloud
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_API_URL?.replace('/api', '') || 'https://calm-flowers-c5253b83e1.strapiapp.com';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_TOKEN || '5dedb8c48d260bfba1af32aef11707351f22dc7b4909af4e5e53690d4ffaf37b28e114fc4daab69ff71393cc15eb8a88a3466e2b881f9c8350120c140113a2a183be07411cb780f3f83488f3158719dce17503e0c1174d0c6b41a98ffe3c93ccd1035d1863419f024dcc9ac34d2620983f9c4c8b141ce551f6b76a434757eb2c';
+const STRAPI_URL = 'https://calm-flowers-c5253b83e1.strapiapp.com';
+const STRAPI_TOKEN = '5dedb8c48d260bfba1af32aef11707351f22dc7b4909af4e5e53690d4ffaf37b28e114fc4daab69ff71393cc15eb8a88a3466e2b881f9c8350120c140113a2a183be07411cb780f3f83488f3158719dce17503e0c1174d0c6b41a98ffe3c93ccd1035d1863419f024dcc9ac34d2620983f9c4c8b141ce551f6b76a434757eb2c';
 
 console.log('🔗 Strapi URL:', STRAPI_URL);
 console.log('🔑 Using API Token:', STRAPI_TOKEN ? 'Yes' : 'No');
@@ -14,7 +14,7 @@ const strapiApi = axios.create({
   baseURL: `${STRAPI_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
-    ...(STRAPI_TOKEN && { 'Authorization': `Bearer ${STRAPI_TOKEN}` })
+    'Authorization': `Bearer ${STRAPI_TOKEN}`
   },
   timeout: 10000, // 10 second timeout
 });
@@ -562,6 +562,9 @@ export async function submitContactForm(formData: any) {
         formData: formData,
         submittedAt: new Date().toISOString(),
         clientEmail: formData.email,
+        priority: 'Normal',
+        submissionStatus: 'New',
+        notes: 'Form submitted via website',
         ipAddress: typeof window !== 'undefined' ? '127.0.0.1' : '',
         userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
         referrer: typeof window !== 'undefined' ? document.referrer : '',
@@ -583,6 +586,9 @@ export async function submitCareerApplication(formData: any) {
         formData: formData,
         submittedAt: new Date().toISOString(),
         clientEmail: formData.email,
+        priority: 'Normal',
+        submissionStatus: 'New',
+        notes: 'Career application submitted via website',
         ipAddress: typeof window !== 'undefined' ? '127.0.0.1' : '',
         userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
         referrer: typeof window !== 'undefined' ? document.referrer : '',
@@ -604,6 +610,9 @@ export async function submitNewsletterSignup(email: string) {
         formData: { email },
         submittedAt: new Date().toISOString(),
         clientEmail: email,
+        priority: 'Normal',
+        submissionStatus: 'New',
+        notes: 'Newsletter signup via website',
         ipAddress: typeof window !== 'undefined' ? '127.0.0.1' : '',
         userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
         referrer: typeof window !== 'undefined' ? document.referrer : '',
@@ -625,6 +634,9 @@ export async function submitConsultationRequest(formData: any) {
         formData: formData,
         submittedAt: new Date().toISOString(),
         clientEmail: formData.email,
+        priority: 'Normal',
+        submissionStatus: 'New',
+        notes: 'Consultation request submitted via website',
         ipAddress: typeof window !== 'undefined' ? '127.0.0.1' : '',
         userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
         referrer: typeof window !== 'undefined' ? document.referrer : '',

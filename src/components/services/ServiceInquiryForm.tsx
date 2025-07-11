@@ -65,8 +65,8 @@ export default function ServiceInquiryForm({
                 </div>
                 <div>
                   <p className="text-sm text-white/80">Email us at</p>
-                  <a href="mailto:sales@unityinnovate.com" className="text-white hover:text-accent transition-colors">
-                    sales@unityinnovate.com
+                  <a href="mailto:contact@unityinnovate.com" className="text-white hover:text-accent transition-colors">
+                    contact@unityinnovate.com
                   </a>
                 </div>
               </div>

@@ -60,8 +60,8 @@ const ServiceContactSection = ({
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Email us at</p>
-                  <a href="mailto:sales@unityinnovate.com" className="font-medium hover:text-accent transition-colors">
-                    sales@unityinnovate.com
+                  <a href="mailto:contact@unityinnovate.com" className="font-medium hover:text-accent transition-colors">
+                    contact@unityinnovate.com
                   </a>
                 </div>
               </div>

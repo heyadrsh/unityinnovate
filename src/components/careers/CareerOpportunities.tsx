@@ -270,7 +270,7 @@ const CareerOpportunities = () => {
             "Did you not find a relevant opportunity?"
           </h3>
           <p className="text-gray-600 mb-4">
-            Email your resume to: <span className="font-semibold text-green-600">jobs@unityinnovate.com</span>
+            Email your resume to: <span className="font-semibold text-green-600">hitesh@unityinnovate.com</span>
           </p>
           <p className="text-gray-600 text-sm">
             We will respond as soon as we find a relevant opening for you.

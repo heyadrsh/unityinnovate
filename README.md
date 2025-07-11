@@ -66,12 +66,12 @@ NEXT_PUBLIC_STRAPI_API_URL=https://calm-flowers-c5253b83e1.strapiapp.com/api
    ```bash
    cp .env.example .env.local
    # Edit .env.local with your Strapi URL
-   ```
+```
 
 4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)

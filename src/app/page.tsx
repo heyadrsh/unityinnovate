@@ -28,14 +28,14 @@ export default async function Home() {
     const whoWeAre = whoWeAreData.status === 'fulfilled' ? whoWeAreData.value : { data: null, error: whoWeAreData.reason };
     const features = featuresData.status === 'fulfilled' ? featuresData.value : { data: null, error: featuresData.reason };
 
-    // Debug log to see data structure
+  // Debug log to see data structure
     console.log('✅ Hero Data:', hero.data ? 'LOADED' : 'EMPTY', hero.error || '');
     console.log('✅ Stats Data:', stats.data ? 'LOADED' : 'EMPTY', stats.error || '');
     console.log('✅ Who We Are Data:', whoWeAre.data ? 'LOADED' : 'EMPTY', whoWeAre.error || '');
     console.log('✅ Features Data:', features.data ? 'LOADED' : 'EMPTY', features.error || '');
 
-    return (
-      <>
+  return (
+    <>
         <Hero heroData={hero?.data} statsData={stats?.data} />
         <CompanyOverview whoWeAreData={whoWeAre?.data} featuresData={features?.data} />
         <Services />
@@ -54,13 +54,13 @@ export default async function Home() {
       <>
         <Hero heroData={undefined} statsData={undefined} />
         <CompanyOverview whoWeAreData={undefined} featuresData={undefined} />
-        <Services />
-        <Industries />
-        <CaseStudies />
+      <Services />
+      <Industries />
+      <CaseStudies />
         <ValuePillars />
-        <ClientTestimonials />
-        <ContactSection />
-      </>
-    );
+      <ClientTestimonials />
+      <ContactSection />
+    </>
+  );
   }
 }
